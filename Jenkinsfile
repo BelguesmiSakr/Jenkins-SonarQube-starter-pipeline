@@ -35,14 +35,14 @@ pipeline {
                 stage('Backend deps') {
                     steps {
                         dir('backend') {
-                            sh 'npm ci'
+                            sh 'npm install'
                         }
                     }
                 }
                 stage('Frontend deps') {
                     steps {
                         dir('frontend') {
-                            sh 'npm ci'
+                            sh 'npm install'
                         }
                     }
                 }
