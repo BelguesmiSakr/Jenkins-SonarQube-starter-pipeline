@@ -40,6 +40,28 @@ sudo docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   jenkins/jenkins:lts-jdk17
 
+echo "=== Installing Docker CLI inside Jenkins container ==="
+sleep 15  # wait for container to be ready
+
+sudo docker exec -u root jenkins bash -c "
+  if ! command -v docker > /dev/null 2>&1; then
+    apt-get update -y -qq
+    apt-get install -y -qq docker.io
+  else
+    echo 'Docker CLI already present'
+  fi
+"
+
+# Match the GID of the host docker socket so the jenkins user can use it
+DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
+sudo docker exec -u root jenkins bash -c "
+  groupmod -g ${DOCKER_GID} docker 2>/dev/null; usermod -aG docker jenkins
+"
+
+sudo docker restart jenkins
+echo "Waiting for Jenkins to restart..."
+sleep 20
+
 echo "=== Installing Node.js 20 ==="
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
