@@ -74,37 +74,36 @@ pipeline {
             }
         }
 
-        // ── Stage 4: SonarQube Analysis ───────────────────────────────────────
-        stage('SonarQube Analysis') {
-            parallel {
-                stage('Backend SonarQube') {
-                    steps {
-                        dir('backend') {
-                            withSonarQubeEnv('SonarQube') {
-                                sh """
-                                    ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
-                                      -Dsonar.projectKey=cicd-backend \
-                                      -Dsonar.sources=src \
-                                      -Dsonar.tests=tests \
-                                      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                                """
-                            }
-                        }
+        // ── Stage 4: SonarQube Analysis (sequential to avoid OOM on t3.small) ──
+        stage('SonarQube Analysis - Backend') {
+            steps {
+                dir('backend') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
+                              -Dsonar.projectKey=cicd-backend \
+                              -Dsonar.sources=src \
+                              -Dsonar.tests=tests \
+                              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                              -Dsonar.scanner.javaOpts=-Xmx256m
+                        """
                     }
                 }
-                stage('Frontend SonarQube') {
-                    steps {
-                        dir('frontend') {
-                            withSonarQubeEnv('SonarQube') {
-                                sh """
-                                    ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
-                                      -Dsonar.projectKey=cicd-frontend \
-                                      -Dsonar.sources=src \
-                                      -Dsonar.exclusions=**/*.test.js \
-                                      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-                                """
-                            }
-                        }
+            }
+        }
+
+        stage('SonarQube Analysis - Frontend') {
+            steps {
+                dir('frontend') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
+                              -Dsonar.projectKey=cicd-frontend \
+                              -Dsonar.sources=src \
+                              -Dsonar.exclusions=**/*.test.js \
+                              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                              -Dsonar.scanner.javaOpts=-Xmx256m
+                        """
                     }
                 }
             }
