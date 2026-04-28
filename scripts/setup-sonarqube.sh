@@ -1,8 +1,8 @@
 #!/bin/bash
-# Run this on VM1 (CI server) after terraform apply
+# Run this on the dedicated SonarQube EC2 instance
 set -e
 
-echo "=== Creating 2 GB swap (needed for SonarQube on t2.micro) ==="
+echo "=== Creating 2 GB swap ==="
 if [ ! -f /swapfile ]; then
   sudo fallocate -l 2G /swapfile
   sudo chmod 600 /swapfile
@@ -30,24 +30,20 @@ else
   echo "Docker already installed, skipping."
 fi
 
-echo "=== Starting Jenkins ==="
-sudo docker run -d \
-  --name jenkins \
-  --restart unless-stopped \
-  -p 8080:8080 \
-  -p 50000:50000 \
-  -v jenkins_home:/var/jenkins_home \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  jenkins/jenkins:lts-jdk17
-
-echo "=== Installing Node.js 20 ==="
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
+echo "=== Starting SonarQube ==="
+if ! sudo docker ps -a --format '{{.Names}}' | grep -q '^sonarqube$'; then
+  sudo docker run -d \
+    --name sonarqube \
+    --restart unless-stopped \
+    -p 9000:9000 \
+    -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+    sonarqube:community
+else
+  echo "SonarQube container already exists, starting it."
+  sudo docker start sonarqube
+fi
 
 echo ""
-echo "=== Setup complete ==="
-echo "Jenkins: http://$(curl -s ifconfig.me):8080"
+echo "=== SonarQube setup complete ==="
 echo "SonarQube: http://$(curl -s ifconfig.me):9000"
-echo ""
-echo "Jenkins initial admin password:"
-sudo docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+echo "Wait ~2 minutes for SonarQube to fully start, then login with admin/admin"

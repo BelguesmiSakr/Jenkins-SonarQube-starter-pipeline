@@ -14,7 +14,7 @@ pipeline {
         DOCKERHUB_USER     = 'belguesmisakr'   
         BACKEND_IMAGE      = "${DOCKERHUB_USER}/cicd-backend"
         FRONTEND_IMAGE     = "${DOCKERHUB_USER}/cicd-frontend"
-        SONAR_HOST_URL     = 'http://108.129.93.149:9000'
+        SONAR_HOST_URL     = 'http://34.241.59.9:9000'
         VM2_HOST           = 'ubuntu@108.131.4.9'
         COMPOSE_FILE_PATH  = '/home/ubuntu/app'
     }

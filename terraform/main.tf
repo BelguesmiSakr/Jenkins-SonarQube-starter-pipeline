@@ -90,10 +90,10 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# ── EC2 #1 — CI Server (Jenkins + SonarQube) ─────────────────────────────────
+# ── EC2 #1 — Jenkins ─────────────────────────────────────────────────────────
 resource "aws_instance" "ec2_ci" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t3.small"    # free-tier eligible on this account (2 vCPU / 2 GB)
+  instance_type               = "t3.small"    # free-tier eligible (2 vCPU / 2 GB)
   key_name                    = aws_key_pair.cicd_key.key_name
   vpc_security_group_ids      = [aws_security_group.cicd_sg.id]
   associate_public_ip_address = true
@@ -104,7 +104,25 @@ resource "aws_instance" "ec2_ci" {
   }
 
   tags = {
-    Name = "ec2-ci-server"
+    Name = "ec2-jenkins"
+  }
+}
+
+# ── EC2 #2 — SonarQube (dedicated) ────────────────────────────────────────────
+resource "aws_instance" "ec2_sonarqube" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t3.small"    # free-tier eligible (2 vCPU / 2 GB)
+  key_name                    = aws_key_pair.cicd_key.key_name
+  vpc_security_group_ids      = [aws_security_group.cicd_sg.id]
+  associate_public_ip_address = true
+
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name = "ec2-sonarqube"
   }
 }
 
