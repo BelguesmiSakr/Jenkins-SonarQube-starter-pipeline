@@ -31,9 +31,13 @@ else
 fi
 
 echo "=== Starting Jenkins ==="
+# --group-add injects the host docker socket GID so the jenkins user
+# can access /var/run/docker.sock without any in-container group surgery
+DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
 sudo docker run -d \
   --name jenkins \
   --restart unless-stopped \
+  --group-add "${DOCKER_GID}" \
   -p 8080:8080 \
   -p 50000:50000 \
   -v jenkins_home:/var/jenkins_home \
@@ -42,7 +46,6 @@ sudo docker run -d \
 
 echo "=== Installing Docker CLI inside Jenkins container ==="
 sleep 15  # wait for container to be ready
-
 sudo docker exec -u root jenkins bash -c "
   if ! command -v docker > /dev/null 2>&1; then
     apt-get update -y -qq
@@ -51,16 +54,6 @@ sudo docker exec -u root jenkins bash -c "
     echo 'Docker CLI already present'
   fi
 "
-
-# Match the GID of the host docker socket so the jenkins user can use it
-DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
-sudo docker exec -u root jenkins bash -c "
-  groupmod -g ${DOCKER_GID} docker 2>/dev/null; usermod -aG docker jenkins
-"
-
-sudo docker restart jenkins
-echo "Waiting for Jenkins to restart..."
-sleep 20
 
 echo "=== Installing Node.js 20 ==="
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
