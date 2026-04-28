@@ -82,7 +82,7 @@ pipeline {
                         dir('backend') {
                             withSonarQubeEnv('SonarQube') {
                                 sh """
-                                    sonar-scanner \
+                                    ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
                                       -Dsonar.projectKey=cicd-backend \
                                       -Dsonar.sources=src \
                                       -Dsonar.tests=tests \
@@ -97,7 +97,7 @@ pipeline {
                         dir('frontend') {
                             withSonarQubeEnv('SonarQube') {
                                 sh """
-                                    sonar-scanner \
+                                    ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
                                       -Dsonar.projectKey=cicd-frontend \
                                       -Dsonar.sources=src \
                                       -Dsonar.exclusions=**/*.test.js \
