@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS 20'
+    }
+
     // ── Parameters allow manual rollback by specifying a previous tag ─────────
     parameters {
         string(name: 'IMAGE_TAG', defaultValue: "v${BUILD_NUMBER}", description: 'Docker image tag (e.g. v5 for rollback)')
