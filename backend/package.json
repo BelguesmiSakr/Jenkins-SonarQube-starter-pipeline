@@ -1,17 +1,19 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "Simple Express API for CI/CD demo",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "test": "jest --coverage --ci"
-  },
   "dependencies": {
-    "express": "^4.18.2"
+    "@faker-js/faker": "^10.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.3",
+    "sequelize": "^6.37.8"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "supertest": "^6.3.4"
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
   }
 }

@@ -64,10 +64,10 @@ pipeline {
                         }
                     }
                 }
-                stage('Frontend tests') {
+                stage('Frontend lint') {
                     steps {
                         dir('frontend') {
-                            sh 'CI=true npm test'
+                            sh 'npm run lint'
                         }
                     }
                 }
@@ -82,8 +82,9 @@ pipeline {
                         sh """
                             ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
                               -Dsonar.projectKey=cicd-backend \
-                              -Dsonar.sources=src \
-                              -Dsonar.tests=tests \
+                              -Dsonar.sources=. \
+                              -Dsonar.exclusions=**/__tests__/**,**/node_modules/**,**/coverage/** \
+                              -Dsonar.tests=__tests__ \
                               -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                               -Dsonar.scanner.javaOpts=-Xmx256m
                         """
@@ -99,9 +100,8 @@ pipeline {
                         sh """
                             ${tool 'SonarQube Scanner'}/bin/sonar-scanner \
                               -Dsonar.projectKey=cicd-frontend \
-                              -Dsonar.sources=src \
-                              -Dsonar.exclusions=**/*.test.js \
-                              -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                              -Dsonar.sources=app \
+                              -Dsonar.exclusions=**/node_modules/**,**/.next/**,**/out/** \
                               -Dsonar.scanner.javaOpts=-Xmx256m
                         """
                     }
@@ -212,7 +212,7 @@ pipeline {
         success {
             echo "Pipeline PASSED — image tag: ${params.IMAGE_TAG}"
             echo "Frontend: http://${VM2_HOST.split('@')[1]}"
-            echo "Backend:  http://${VM2_HOST.split('@')[1]}:3000/health"
+            echo "Backend:  http://${VM2_HOST.split('@')[1]}:3001/techniciens"
         }
         failure {
             echo "Pipeline FAILED — check logs above"

@@ -5,9 +5,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-COPY src/ ./src/
+COPY server.js db.js models.js migration.js ./
+COPY routes/ ./routes/
 
-ENV PORT=3000
-EXPOSE 3000
+EXPOSE 3001
 
-CMD ["node", "src/index.js"]
+CMD ["node", "server.js"]
