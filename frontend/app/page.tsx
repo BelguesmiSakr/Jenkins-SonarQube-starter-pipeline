@@ -20,7 +20,7 @@ export default function Home() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/incidents")
+    fetch("/incidents")
       .then((res) => res.json())
       .then(setIncidents)
       .catch(console.error);

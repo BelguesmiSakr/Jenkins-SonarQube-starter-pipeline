@@ -14,6 +14,8 @@ const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN ?? '*' }));
 app.use(bodyParser.json());
 
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+
 app.use('/techniciens', technicienRoutes);
 app.use('/incidents', incidentRoutes);
 app.use('/interventions', interventionRoutes);

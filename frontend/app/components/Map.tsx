@@ -67,7 +67,7 @@ export default function IncidentMap({
   const [interventions, setInterventions] = useState<Intervention[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/interventions")
+    fetch("/interventions")
       .then((res) => res.json())
       .then(setInterventions)
       .catch(console.error);
