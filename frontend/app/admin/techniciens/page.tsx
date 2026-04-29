@@ -10,7 +10,7 @@ type Technicien = {
   phone: string;
 };
 
-const API = "http://108.131.4.9:3001/techniciens";
+const API = "/techniciens";
 
 export default function TechniciensAdmin() {
   const [techniciens, setTechniciens] = useState<Technicien[]>([]);

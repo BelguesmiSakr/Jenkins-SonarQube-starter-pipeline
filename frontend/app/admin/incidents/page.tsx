@@ -9,7 +9,7 @@ type Incident = {
   longitude: number;
 };
 
-const API = "http://108.131.4.9:3001/incidents";
+const API = "/incidents";
 
 export default function IncidentAdmin() {
   const [incidents, setIncidents] = useState<Incident[]>([]);

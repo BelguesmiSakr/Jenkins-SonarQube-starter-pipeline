@@ -20,9 +20,9 @@ type Incident = {
   name: string;
 };
 
-const API_INT = "http://108.131.4.9:3001/interventions";
-const API_TECHNICIENS = "http://108.131.4.9:3001/techniciens";
-const API_INCIDENTS = "http://108.131.4.9:3001/incidents";
+const API_INT = "/interventions";
+const API_TECHNICIENS = "/techniciens";
+const API_INCIDENTS = "/incidents";
 
 export default function InterventionsAdmin() {
   const [interventions, setInterventions] = useState<Intervention[]>([]);
