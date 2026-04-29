@@ -60,4 +60,8 @@ async function init() {
     console.log('Tables created/updated');
 }
 
-init().catch(console.error);
+try {
+    await init();
+} catch (err) {
+    console.error(err);
+}

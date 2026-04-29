@@ -59,7 +59,7 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-export default function Map({
+export default function IncidentMap({
   incidents,
 }: {
   incidents: Incident[];

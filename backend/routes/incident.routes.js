@@ -60,11 +60,11 @@ router.delete('/:id', async (req, res, next) => {
 router.get('/nearby/:lat/:lon/:radius', async (req, res, next) => {
     try {
         const { lat, lon, radius } = req.params;
-        const centerLat = parseFloat(lat);
-        const centerLon = parseFloat(lon);
-        const searchRadius = parseFloat(radius);
+        const centerLat = Number.parseFloat(lat);
+        const centerLon = Number.parseFloat(lon);
+        const searchRadius = Number.parseFloat(radius);
 
-        if (isNaN(centerLat) || isNaN(centerLon) || isNaN(searchRadius)) {
+        if (Number.isNaN(centerLat) || Number.isNaN(centerLon) || Number.isNaN(searchRadius)) {
             return res.status(400).json({ error: 'Invalid parameters' });
         }
 

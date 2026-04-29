@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { sequelize } from './db.js';
 import './models.js';
 
@@ -11,7 +11,7 @@ import interventionRoutes from './routes/intervention.routes.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.CORS_ORIGIN ?? '*' }));
 app.use(bodyParser.json());
 
 app.use('/techniciens', technicienRoutes);
@@ -34,7 +34,7 @@ async function start() {
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
-    start();
+    await start();
 }
 
 export { app, start };

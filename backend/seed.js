@@ -94,4 +94,4 @@ async function seed() {
     }
 }
 
-seed();
+await seed();

@@ -12,7 +12,7 @@ type Incident = {
 };
 
 // Load map only on client (VERY IMPORTANT)
-const Map = dynamic(() => import("./components/Map"), {
+const IncidentMap = dynamic(() => import("./components/Map"), {
   ssr: false,
 });
 
@@ -33,7 +33,7 @@ export default function Home() {
       </h1>
       <p>Number of incidents: {incidents.length}</p>
 
-      <Map incidents={incidents} />
+      <IncidentMap incidents={incidents} />
     </div>
   );
 }
