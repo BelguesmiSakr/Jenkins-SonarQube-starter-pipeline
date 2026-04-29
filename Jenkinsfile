@@ -55,7 +55,7 @@ pipeline {
                 stage('Backend tests') {
                     steps {
                         dir('backend') {
-                            sh 'npm test -- --forceExit --testPathIgnorePatterns="__tests__/technicien.integration.test.js"'
+                            sh 'npm test -- --forceExit --coverage --testPathIgnorePatterns="__tests__/technicien.integration.test.js"'
                         }
                     }
                     post {

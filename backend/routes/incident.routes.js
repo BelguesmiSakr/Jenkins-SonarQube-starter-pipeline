@@ -3,9 +3,8 @@ import { Incident } from '../models.js';
 
 const router = express.Router();
 
-// Fonction utilitaire pour calculer la distance entre deux points (en km)
 export function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Rayon de la Terre en km
+    const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a =
@@ -13,34 +12,52 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const distance = R * c;
-    return Math.round(distance * 100) / 100; // Arrondi à 2 décimales
+    return Math.round(R * c * 100) / 100;
 }
 
-router.post('/', async (req, res) => {
-    res.json(await Incident.create(req.body));
+router.post('/', async (req, res, next) => {
+    try {
+        res.json(await Incident.create(req.body));
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.get('/', async (req, res) => {
-    res.json(await Incident.findAll());
+router.get('/', async (req, res, next) => {
+    try {
+        res.json(await Incident.findAll());
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.get('/:id', async (req, res) => {
-    res.json(await Incident.findByPk(req.params.id));
+router.get('/:id', async (req, res, next) => {
+    try {
+        res.json(await Incident.findByPk(req.params.id));
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.put('/:id', async (req, res) => {
-    await Incident.update(req.body, { where: { id: req.params.id } });
-    res.json({ message: 'Incident updated' });
+router.put('/:id', async (req, res, next) => {
+    try {
+        await Incident.update(req.body, { where: { id: req.params.id } });
+        res.json({ message: 'Incident updated' });
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.delete('/:id', async (req, res) => {
-    await Incident.destroy({ where: { id: req.params.id } });
-    res.json({ message: 'Incident deleted' });
+router.delete('/:id', async (req, res, next) => {
+    try {
+        await Incident.destroy({ where: { id: req.params.id } });
+        res.json({ message: 'Incident deleted' });
+    } catch (err) {
+        next(err);
+    }
 });
 
-// Route pour trouver les incidents dans un rayon donné
-router.get('/nearby/:lat/:lon/:radius', async (req, res) => {
+router.get('/nearby/:lat/:lon/:radius', async (req, res, next) => {
     try {
         const { lat, lon, radius } = req.params;
         const centerLat = parseFloat(lat);
@@ -52,32 +69,16 @@ router.get('/nearby/:lat/:lon/:radius', async (req, res) => {
         }
 
         const incidents = await Incident.findAll();
-        const nearbyIncidents = incidents.filter(incident => {
-            const distance = calculateDistance(
-                centerLat,
-                centerLon,
-                incident.latitude,
-                incident.longitude
-            );
-            return distance <= searchRadius;
-        }).map(incident => ({
-            ...incident.toJSON(),
-            distance: calculateDistance(
-                centerLat,
-                centerLon,
-                incident.latitude,
-                incident.longitude
-            )
-        }));
+        const nearbyIncidents = incidents
+            .filter(incident => calculateDistance(centerLat, centerLon, incident.latitude, incident.longitude) <= searchRadius)
+            .map(incident => ({
+                ...incident.toJSON(),
+                distance: calculateDistance(centerLat, centerLon, incident.latitude, incident.longitude)
+            }));
 
-        res.json({
-            center: { lat: centerLat, lon: centerLon },
-            radius: searchRadius,
-            count: nearbyIncidents.length,
-            incidents: nearbyIncidents
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        res.json({ center: { lat: centerLat, lon: centerLon }, radius: searchRadius, count: nearbyIncidents.length, incidents: nearbyIncidents });
+    } catch (err) {
+        next(err);
     }
 });
 

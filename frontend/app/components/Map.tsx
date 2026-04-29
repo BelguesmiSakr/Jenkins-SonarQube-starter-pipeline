@@ -69,7 +69,8 @@ export default function Map({
   useEffect(() => {
     fetch("http://localhost:3001/interventions")
       .then((res) => res.json())
-      .then(setInterventions);
+      .then(setInterventions)
+      .catch(console.error);
   }, []);
 
   const defaultCenter: [number, number] = [48.8566, 2.3522]; // Paris fallback
