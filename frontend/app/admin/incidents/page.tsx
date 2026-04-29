@@ -9,7 +9,7 @@ type Incident = {
   longitude: number;
 };
 
-const API = "http://localhost:3001/incidents";
+const API = "http://108.131.4.9:3001/incidents";
 
 export default function IncidentAdmin() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
@@ -62,14 +62,11 @@ export default function IncidentAdmin() {
 
       {/* FORM */}
       <div className="bg-white p-4 rounded shadow mb-6 flex gap-2">
-
         <input
           className="border p-2 rounded w-full"
           placeholder="Name"
           value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
 
         <input

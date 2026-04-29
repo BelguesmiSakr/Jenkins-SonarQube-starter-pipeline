@@ -10,7 +10,7 @@ type Technicien = {
   phone: string;
 };
 
-const API = "http://localhost:3001/techniciens";
+const API = "http://108.131.4.9:3001/techniciens";
 
 export default function TechniciensAdmin() {
   const [techniciens, setTechniciens] = useState<Technicien[]>([]);
@@ -81,16 +81,13 @@ export default function TechniciensAdmin() {
 
       {/* FORM */}
       <div className="bg-white p-4 rounded-xl shadow mb-6">
-
         <div className="flex flex-wrap gap-3">
           <input
             type="text"
             placeholder="Name"
             className="border p-2 rounded w-full md:w-1/4"
             value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
 
           <input
@@ -98,9 +95,7 @@ export default function TechniciensAdmin() {
             placeholder="Firstname"
             className="border p-2 rounded w-full md:w-1/4"
             value={form.firstname}
-            onChange={(e) =>
-              setForm({ ...form, firstname: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, firstname: e.target.value })}
           />
 
           <input
@@ -108,9 +103,7 @@ export default function TechniciensAdmin() {
             placeholder="Email"
             className="border p-2 rounded w-full md:w-1/3"
             value={form.email}
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
 
           <input
@@ -118,9 +111,7 @@ export default function TechniciensAdmin() {
             placeholder="Phone"
             className="border p-2 rounded w-full md:w-1/4"
             value={form.phone}
-            onChange={(e) =>
-              setForm({ ...form, phone: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
 
           <button

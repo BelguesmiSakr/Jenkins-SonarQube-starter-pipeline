@@ -1,42 +1,42 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { fileURLToPath } from 'node:url';
-import { sequelize } from './db.js';
-import './models.js';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { fileURLToPath } from "node:url";
+import { sequelize } from "./db.js";
+import "./models.js";
 
-import technicienRoutes from './routes/technicien.routes.js';
-import incidentRoutes from './routes/incident.routes.js';
-import interventionRoutes from './routes/intervention.routes.js';
+import technicienRoutes from "./routes/technicien.routes.js";
+import incidentRoutes from "./routes/incident.routes.js";
+import interventionRoutes from "./routes/intervention.routes.js";
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? '*' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN ?? "*" }));
 app.use(bodyParser.json());
 
-app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
-app.use('/techniciens', technicienRoutes);
-app.use('/incidents', incidentRoutes);
-app.use('/interventions', interventionRoutes);
+app.use("/techniciens", technicienRoutes);
+app.use("/incidents", incidentRoutes);
+app.use("/interventions", interventionRoutes);
 
 async function start() {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync();
-        console.log('Database connected');
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    console.log("Database connected");
 
-        app.listen(3001, () => {
-            console.log('Server running on http://localhost:3001');
-        });
-    } catch (err) {
-        console.error(err);
-    }
+    app.listen(3001, () => {
+      console.log("Server running on http://108.131.4.9:3001");
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
-    await start();
+  await start();
 }
 
 export { app, start };

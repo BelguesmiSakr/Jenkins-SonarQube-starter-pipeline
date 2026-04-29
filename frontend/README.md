@@ -7,6 +7,7 @@
 ## Features
 
 ### 🗺️ Interactive Incident Map
+
 - **Live Visualization**: Displays all active incidents using OpenStreetMap (Leaflet).
 - **Technician Tracking**: Each marker shows the number of technicians currently assigned to that incident.
 - **Visual Urgency**:
@@ -15,7 +16,9 @@
 - **Responsive Popups**: Click any marker to see details and the count of responders.
 
 ### ⚙️ Dashboard (Admin Interface)
+
 Full CRUD (Create, Read, Update, Delete) management for:
+
 - **Incidents**: Manage incident names and geographical coordinates.
 - **Technicians**: Track workforce details (name, email, phone).
 - **Interventions**: Link technicians to specific incidents.
@@ -25,28 +28,33 @@ Full CRUD (Create, Read, Update, Delete) management for:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - **Node.js** (v18+)
-- **Running Backend API**: Ensure the [Backend API](https://github.com/fredericEducentre/api_crisiview) is running on `http://localhost:3001`.
+- **Running Backend API**: Ensure the [Backend API](https://github.com/fredericEducentre/api_crisiview) is running on `http://108.131.4.9:3001`.
 
 ### Installation
 
 1. Clone the repository and navigate to the project folder.
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Run the development server:
+
 ```bash
 npm run dev
 ```
 
 4. Build the application:
+
 ```bash
 npm run build
 ```
 
 5. Run the production server:
+
 ```bash
 npm start
 ```
@@ -84,4 +92,4 @@ app/
 ## 🔗 Connection to API
 
 The frontend connects to the backend via local network requests. The default API URL is configured as:
-`http://localhost:3001`
+`http://108.131.4.9:3001`

@@ -18,20 +18,25 @@ npm install
 1. Configure your MySQL connection in `db.js`.
 
 1a. (optional) Create an mySQL instance with docker:
+
 ```bash
 docker run --name mysql-crisiview -e MYSQL_ROOT_PASSWORD=root -p 3307:3306 -d mysql:8.4.8
 ```
 
 2. run migrations:
+
 ```bash
 node migration.js
 ```
+
 3. (Optional) Seed the database with fake data:
+
 ```bash
 node seed.js
 ```
 
 4. (Optional) Run tests:
+
 ```bash
 npm test
 ```
@@ -41,13 +46,15 @@ npm test
 ```bash
 node server.js
 ```
-The server runs on `http://localhost:3001` by default.
+
+The server runs on `http://108.131.4.9:3001` by default.
 
 ---
 
 ## Data Models
 
 ### Techniciens
+
 - `id` (Primary Key)
 - `name` (String)
 - `firstname` (String)
@@ -55,12 +62,14 @@ The server runs on `http://localhost:3001` by default.
 - `phone` (String)
 
 ### Incidents
+
 - `id` (Primary Key)
 - `name` (String) - e.g., "Main Street Leak"
 - `latitude` (Float)
 - `longitude` (Float)
 
 ### Interventions
+
 - `id` (Primary Key)
 - `id_technicien` (Foreign Key -> Techniciens)
 - `id_incident` (Foreign Key -> Incidents)
@@ -71,15 +80,16 @@ The server runs on `http://localhost:3001` by default.
 
 ### Techniciens (`/techniciens`)
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/techniciens` | Get all technicians |
-| GET | `/techniciens/:id` | Get single technician |
-| POST | `/techniciens` | Create technician |
-| PUT | `/techniciens/:id` | Update technician |
-| DELETE | `/techniciens/:id` | Delete technician |
+| Method | Endpoint           | Description           |
+| :----- | :----------------- | :-------------------- |
+| GET    | `/techniciens`     | Get all technicians   |
+| GET    | `/techniciens/:id` | Get single technician |
+| POST   | `/techniciens`     | Create technician     |
+| PUT    | `/techniciens/:id` | Update technician     |
+| DELETE | `/techniciens/:id` | Delete technician     |
 
 **Example POST Payload:**
+
 ```json
 {
   "name": "Dupont",
@@ -91,15 +101,16 @@ The server runs on `http://localhost:3001` by default.
 
 ### Incidents (`/incidents`)
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/incidents` | Get all incidents |
-| GET | `/incidents/:id` | Get single incident |
-| POST | `/incidents` | Create incident |
-| PUT | `/incidents/:id` | Update incident |
-| DELETE | `/incidents/:id` | Delete incident |
+| Method | Endpoint         | Description         |
+| :----- | :--------------- | :------------------ |
+| GET    | `/incidents`     | Get all incidents   |
+| GET    | `/incidents/:id` | Get single incident |
+| POST   | `/incidents`     | Create incident     |
+| PUT    | `/incidents/:id` | Update incident     |
+| DELETE | `/incidents/:id` | Delete incident     |
 
 **Example POST Payload:**
+
 ```json
 {
   "name": "Flooding at Central Park",
@@ -110,15 +121,16 @@ The server runs on `http://localhost:3001` by default.
 
 ### Interventions (`/interventions`)
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/interventions` | Get all interventions (includes Technicien and Incident details) |
-| GET | `/interventions/:id` | Get single intervention |
-| POST | `/interventions` | Assign a technician to an incident |
-| PUT | `/interventions/:id` | Update assignment |
-| DELETE | `/interventions/:id` | Remove assignment |
+| Method | Endpoint             | Description                                                      |
+| :----- | :------------------- | :--------------------------------------------------------------- |
+| GET    | `/interventions`     | Get all interventions (includes Technicien and Incident details) |
+| GET    | `/interventions/:id` | Get single intervention                                          |
+| POST   | `/interventions`     | Assign a technician to an incident                               |
+| PUT    | `/interventions/:id` | Update assignment                                                |
+| DELETE | `/interventions/:id` | Remove assignment                                                |
 
 **Example POST Payload:**
+
 ```json
 {
   "id_technicien": 1,
